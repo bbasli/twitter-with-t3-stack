@@ -1,9 +1,15 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import type { NextPage } from "next";
 
 import Head from "next/head";
 
 import { api } from "~/utils/api";
+import type { RouterOutputs } from "~/utils/api";
+
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
@@ -22,6 +28,31 @@ const CreatePostWizard = () => {
         placeholder="Type some emojis"
         className="grow bg-transparent outline-none"
       />
+    </div>
+  );
+};
+
+type PostWithUser = RouterOutputs["posts"]["getAll"][number];
+
+const PostView = (props: PostWithUser) => {
+  const { post, author } = props;
+
+  return (
+    <div className="flex items-center gap-4 border-b border-slate-400 p-4">
+      <img
+        src={author.profileImageUrl}
+        alt={author.username}
+        className="h-14 w-14 rounded-full"
+      />
+      <div>
+        <div className="flex gap-2 text-slate-300">
+          <span>{`@${author.username}`}</span>
+          <span className="font-thin">{` · ${dayjs(
+            post.createdAt
+          ).fromNow()}`}</span>
+        </div>
+        <span className="text-xl">{post.content}</span>
+      </div>
     </div>
   );
 };
@@ -54,14 +85,7 @@ const Home: NextPage = () => {
           </div>
           <div className="flex flex-col">
             {[...data, ...data]?.map((postWithUser) => (
-              <div
-                key={postWithUser.post.id}
-                className="border-b border-slate-400 p-8"
-              >
-                <h3 className="text-xl font-bold">
-                  {postWithUser.post.content}
-                </h3>
-              </div>
+              <PostView key={postWithUser.post.id} {...postWithUser} />
             ))}
           </div>
         </div>
