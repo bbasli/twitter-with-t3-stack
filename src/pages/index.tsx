@@ -17,8 +17,21 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div>
-          <h1>Sign in</h1>
-          <SignInButton />
+          {!!user.isSignedIn && (
+            <div className="text-white">
+              <h1 className="text-4xl font-bold">
+                Hello {user?.user?.emailAddresses?.[0]?.emailAddress}!
+              </h1>
+              <p className="text-2xl">You are signed in.</p>
+            </div>
+          )}
+          {!user.isSignedIn && (
+            <div className="text-white">
+              <h1 className="text-4xl font-bold">Hello!</h1>
+              <p className="text-2xl">You are not signed in.</p>
+              <SignInButton />
+            </div>
+          )}
         </div>
       </main>
     </>
