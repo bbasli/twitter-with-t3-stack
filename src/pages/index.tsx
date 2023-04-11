@@ -95,7 +95,7 @@ const Feed = () => {
 
   return (
     <div className="flex grow flex-col overflow-y-scroll">
-      {[...data, ...data, ...data, ...data]?.map((postWithUser) => (
+      {data?.map((postWithUser) => (
         <PostView key={postWithUser.post.id} {...postWithUser} />
       ))}
     </div>
