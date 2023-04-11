@@ -77,6 +77,22 @@ const PostView = (props: PostWithUser) => {
   );
 };
 
+const Feed = () => {
+  const { data, isLoading } = api.posts.getAll.useQuery();
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (!data) return <div>Something went wrong</div>;
+
+  return (
+    <div className="flex flex-col">
+      {data?.map((postWithUser) => (
+        <PostView key={postWithUser.post.id} {...postWithUser} />
+      ))}
+    </div>
+  );
+};
+
 const Home: NextPage = () => {
   const user = useUser();
 
@@ -103,11 +119,7 @@ const Home: NextPage = () => {
             )}
             {user.isSignedIn && <CreatePostWizard />}
           </div>
-          <div className="flex flex-col">
-            {[...data, ...data]?.map((postWithUser) => (
-              <PostView key={postWithUser.post.id} {...postWithUser} />
-            ))}
-          </div>
+          <Feed />
         </div>
       </main>
     </>
