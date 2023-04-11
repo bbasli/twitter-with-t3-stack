@@ -96,11 +96,7 @@ const Feed = () => {
 const Home: NextPage = () => {
   const user = useUser();
 
-  const { data, isLoading } = api.posts.getAll.useQuery();
-
-  if (isLoading) return <div>Loading...</div>;
-
-  if (!data) return <div>Something went wrong</div>;
+  api.posts.getAll.useQuery();
 
   return (
     <>
