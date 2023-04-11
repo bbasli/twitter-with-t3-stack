@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import React from "react";
-import { LoadingPage } from "~/components/loading";
+import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { toast } from "react-hot-toast";
 
 dayjs.extend(relativeTime);
@@ -63,9 +63,14 @@ const CreatePostWizard = () => {
           }
         }}
       />
-      <button disabled={isPosting} onClick={() => mutate({ content })}>
-        Post
-      </button>
+      {content !== "" && !isPosting && (
+        <button onClick={() => mutate({ content })}>Post</button>
+      )}
+      {isPosting && (
+        <div className="flex items-center justify-center">
+          <LoadingSpinner size={24} />
+        </div>
+      )}
     </div>
   );
 };
