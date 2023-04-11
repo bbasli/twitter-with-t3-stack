@@ -43,8 +43,8 @@ const CreatePostWizard = () => {
   return (
     <div className="flex w-full gap-4">
       <Image
-        width={64}
-        height={64}
+        width={56}
+        height={56}
         alt={"Profile image"}
         className="rounded-full"
         src={user.profileImageUrl}
@@ -83,8 +83,8 @@ const PostView = (props: PostWithUser) => {
   return (
     <div className="flex items-center gap-4 border-b border-slate-400 p-4">
       <Image
-        width={56}
-        height={56}
+        width={48}
+        height={48}
         alt={author.username}
         className="rounded-full"
         src={author.profileImageUrl}
