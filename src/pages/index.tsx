@@ -9,13 +9,25 @@ import type { RouterOutputs } from "~/utils/api";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
+import React from "react";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
 
+  const [content, setContent] = React.useState<string>("");
+
   if (!user) return null;
+
+  const ctx = api.useContext();
+
+  const { mutate } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setContent("");
+      void ctx.posts.getAll.invalidate();
+    },
+  });
 
   return (
     <div className="flex w-full gap-4">
@@ -28,9 +40,12 @@ const CreatePostWizard = () => {
       />
       <input
         type="text"
+        value={content}
         placeholder="Type some emojis"
+        onChange={(e) => setContent(e.target.value)}
         className="grow bg-transparent outline-none"
       />
+      <button onClick={() => mutate({ content })}>Post</button>
     </div>
   );
 };
