@@ -46,6 +46,12 @@ const CreatePostWizard = () => {
         placeholder="Type some emojis"
         onChange={(e) => setContent(e.target.value)}
         className="grow bg-transparent outline-none"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            mutate({ content });
+          }
+        }}
       />
       <button disabled={isPosting} onClick={() => mutate({ content })}>
         Post
