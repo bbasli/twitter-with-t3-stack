@@ -2,21 +2,19 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
 
-const ProfilePage: NextPage = () => {
-  const { data, isLoading } = api.profile.getUserByUsername.useQuery({
-    id: "user_2OFduXeGQOD8xr5BEt2USzDXf3Z",
-  });
+const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
+  const { data } = api.profile.getUserByUsername.useQuery({ id });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (!data) return <h1>404!!!</h1>;
 
   return (
     <>
       <Head>
-        <title>Profile</title>
+        <title>{data?.username}</title>
       </Head>
-      <main className="flex	min-h-screen justify-center">
+      <PageLayout>
         <div>{data?.username}</div>
-      </main>
+      </PageLayout>
     </>
   );
 };
@@ -25,6 +23,7 @@ import type { GetServerSidePropsContext } from "next";
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
 import superjson from "superjson";
+import { PageLayout } from "~/components/layout";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -43,6 +42,7 @@ export const getServerSideProps = async (
   return {
     props: {
       trpcState: helpers.dehydrate(),
+      id: slug,
     },
   };
 };
