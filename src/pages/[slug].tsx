@@ -3,9 +3,11 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 
 const ProfilePage: NextPage = () => {
-  const { data } = api.profile.getUserByUsername.useQuery({
+  const { data, isLoading } = api.profile.getUserByUsername.useQuery({
     id: "user_2OFduXeGQOD8xr5BEt2USzDXf3Z",
   });
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <>
@@ -18,25 +20,31 @@ const ProfilePage: NextPage = () => {
     </>
   );
 };
-import { createSSGHelpers } from "@trpc/react/ssg";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import type { GetServerSidePropsContext } from "next";
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
 import superjson from "superjson";
 
-export const getStaticProps = async (context) => {
-  const ssg = createSSGHelpers({
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const helpers = createServerSideHelpers({
     router: appRouter,
-    ctx: { prisma },
+    ctx: { prisma, userId: null },
     transformer: superjson,
   });
+  const slug = context.params?.slug as string;
 
-  const slug = context.params?.slug;
+  if (!slug) throw new Error("No slug");
 
-  if (typeof slug !== "string") {
-    throw new Error("Slug must be a string");
-  }
+  await helpers.profile.getUserByUsername.prefetch({ id: slug });
 
-  await ssg.profile.getUserByUsername.prefetch({ id: slug });
+  return {
+    props: {
+      trpcState: helpers.dehydrate(),
+    },
+  };
 };
 
 export default ProfilePage;
