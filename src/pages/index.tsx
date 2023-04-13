@@ -92,7 +92,7 @@ const PostView = (props: PostWithUser) => {
       />
       <div>
         <div className="flex gap-2 text-slate-300">
-          <Link href={`/@${author.username}`}>
+          <Link href={`/${author.id}`}>
             <span>{`@${author.username}`}</span>
           </Link>
           <Link href={`/post/${post.id}`}>
@@ -129,7 +129,9 @@ const Feed = () => {
 };
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn } = useUser();
+  const { isLoaded: userLoaded, isSignedIn, user } = useUser();
+
+  console.log({ user });
 
   // Start fetching asap
   api.posts.getAll.useQuery();
