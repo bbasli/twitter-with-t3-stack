@@ -1,6 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
+import { FiArrowLeft } from "react-icons/fi";
+import Image from "next/image";
+import Link from "next/link";
 
 const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.profile.getUserByUsername.useQuery({ id });
@@ -13,7 +16,36 @@ const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
         <title>{data?.username}</title>
       </Head>
       <PageLayout>
-        <div>{data?.username}</div>
+        <div className="flex items-center gap-4 p-1">
+          <Link href={"/"} className="px-4">
+            <FiArrowLeft size={24} />
+          </Link>
+          <div>
+            <div className="text-[20px leading-6] font-bold">
+              {data?.name ?? ""}
+            </div>
+            <div className="text-sm font-thin text-slate-400">{`${
+              data?.postCount ?? ""
+            } Tweet`}</div>
+          </div>
+        </div>
+        <div className="relative h-36 bg-slate-600">
+          <Image
+            width={128}
+            height={128}
+            src={data?.profileImageUrl}
+            alt={`${data?.username ?? "user"}'s profile`}
+            className="absolute bottom-0 left-0 -mb-[64px] ml-4 rounded-full border-4 border-black"
+          />
+        </div>
+        <div className="h-[64px]"></div>
+        <div className="p-6">
+          <div className="text-2xl font-bold">{data?.name ?? ""}</div>
+          <div className="text-base font-thin text-slate-600">{`@${
+            data?.username ?? ""
+          }`}</div>
+        </div>
+        <div className="w-full border-b border-slate-400"></div>
       </PageLayout>
     </>
   );
