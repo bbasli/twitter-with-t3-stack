@@ -5,33 +5,21 @@ import { FiArrowLeft } from "react-icons/fi";
 import Image from "next/image";
 import Link from "next/link";
 
-import type { User } from "@clerk/nextjs/dist/api";
-
 import { PostView } from "~/components/post-view";
 import { LoadingPage } from "~/components/loading";
 
-const ProfileFeed = (props: { user: User }) => {
+const ProfileFeed = (props: { userId: string }) => {
   const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
-    userId: props.user.id,
+    userId: props.userId,
   });
 
   if (isLoading) return <LoadingPage />;
 
   if (!data || !data.length) return <h1>User has not posted</h1>;
 
-  const username = props.user.username ?? "";
-
-  const postsWithUser = data.map((post) => ({
-    post,
-    author: {
-      ...props.user,
-      username,
-    },
-  }));
-
   return (
     <div className="flex grow flex-col overflow-y-scroll">
-      {postsWithUser?.map((postWithUser) => (
+      {data?.map((postWithUser) => (
         <PostView key={postWithUser.post.id} {...postWithUser} />
       ))}
     </div>
@@ -79,7 +67,7 @@ const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
           }`}</div>
         </div>
         <div className="w-full border-b border-slate-400"></div>
-        <ProfileFeed user={data} />
+        <ProfileFeed userId={id} />
       </PageLayout>
     </>
   );
