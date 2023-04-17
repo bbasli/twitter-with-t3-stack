@@ -50,7 +50,7 @@ const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
             } Tweet`}</div>
           </div>
         </div>
-        <div className="relative h-36 bg-slate-600">
+        <div className="relative h-48 bg-slate-600">
           <Image
             width={128}
             height={128}
