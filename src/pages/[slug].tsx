@@ -73,21 +73,14 @@ const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
   );
 };
 
-import { createServerSideHelpers } from "@trpc/react-query/server";
 import type { GetServerSidePropsContext } from "next";
-import { appRouter } from "~/server/api/root";
-import { prisma } from "~/server/db";
-import superjson from "superjson";
 import { PageLayout } from "~/components/layout";
+import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const helpers = createServerSideHelpers({
-    router: appRouter,
-    ctx: { prisma, userId: null },
-    transformer: superjson,
-  });
+  const helpers = generateSSGHelper();
   const slug = context.params?.slug as string;
 
   if (!slug) throw new Error("No slug");
