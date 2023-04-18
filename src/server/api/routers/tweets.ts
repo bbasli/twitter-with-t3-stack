@@ -1,9 +1,8 @@
 import { clerkClient } from "@clerk/nextjs/server";
-import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import type { User } from "@clerk/nextjs/dist/api";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import type { Post } from "@prisma/client";
 
 const filterUserForClient = (user: User) => {
   const { id, emailAddresses, profileImageUrl } = user;
@@ -13,7 +12,7 @@ const filterUserForClient = (user: User) => {
   return { id, username, profileImageUrl };
 };
 
-const addUserDataToPosts = async (posts: Post[]) => {
+/* const addUserDataToPosts = async (posts: Post[]) => {
   const users = (
     await clerkClient.users.getUserList({
       userId: posts.map((post) => post.authorId),
@@ -38,7 +37,7 @@ const addUserDataToPosts = async (posts: Post[]) => {
       },
     };
   });
-};
+}; */
 
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
@@ -50,19 +49,17 @@ const ratelimit = new Ratelimit({
 });
 
 export const postsRouter = createTRPCRouter({
-  getPostById: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) =>
-      ctx.prisma.post
-        .findUnique({
-          where: { id: input.id },
-        })
-        .then((post) => post && addUserDataToPosts([post]))
-        .then((posts) => posts?.[0])
-    ),
+  getPostById: publicProcedure.input(z.object({ id: z.number() })).query(
+    async ({ ctx, input }) =>
+      ctx.prisma.tweet.findUnique({
+        where: { id: input.id },
+      })
+    /* .then((post) => post && addUserDataToPosts([post]))
+        .then((posts) => posts?.[0]) */
+  ),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const posts = await ctx.prisma.post.findMany({
+    const posts = await ctx.prisma.tweet.findMany({
       take: 100,
       orderBy: [{ createdAt: "desc" }],
     });
@@ -70,39 +67,39 @@ export const postsRouter = createTRPCRouter({
     return addUserDataToPosts(posts);
   }),
 
-  getPostsByUserId: publicProcedure
+  getTweetsByUserId: publicProcedure
     .input(
       z.object({
-        userId: z.string(),
+        userId: z.number(),
       })
     )
-    .query(async ({ ctx, input }) =>
-      ctx.prisma.post
-        .findMany({
+    .query(
+      async ({ ctx, input }) =>
+        ctx.prisma.tweet.findMany({
           where: { authorId: input.userId },
           take: 100,
           orderBy: [{ createdAt: "desc" }],
         })
-        .then(addUserDataToPosts)
+      /* .then(addUserDataToPosts) */
     ),
 
-  create: privateProcedure
+  create: protectedProcedure
     .input(
       z.object({
         content: z.string().emoji("Only emojis are allowed").min(1).max(280),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const authorId = ctx.userId;
+      const authorId = ctx.session?.user?.id;
 
       const { success } = await ratelimit.limit(authorId);
 
       if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
 
-      const post = await ctx.prisma.post.create({
+      const post = await ctx.prisma.tweet.create({
         data: {
-          authorId,
-          content: input.content,
+          authorId: parseInt(authorId, 10),
+          text: input.content,
         },
       });
 
