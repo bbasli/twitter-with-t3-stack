@@ -39,16 +39,16 @@ const filterUserForClient = (user: User) => {
   });
 }; */
 
-import { Ratelimit } from "@upstash/ratelimit";
+/* import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
 // Create a new ratelimiter, that allows 3 requests per 1 minute
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(3, "1 m"),
-});
+}); */
 
-export const postsRouter = createTRPCRouter({
+export const tweetsRouter = createTRPCRouter({
   getPostById: publicProcedure.input(z.object({ id: z.number() })).query(
     async ({ ctx, input }) =>
       ctx.prisma.tweet.findUnique({
@@ -59,12 +59,15 @@ export const postsRouter = createTRPCRouter({
   ),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const posts = await ctx.prisma.tweet.findMany({
+    const tweets = await ctx.prisma.tweet.findMany({
+      include: {
+        author: true,
+      },
       take: 100,
       orderBy: [{ createdAt: "desc" }],
     });
 
-    return addUserDataToPosts(posts);
+    return tweets;
   }),
 
   getTweetsByUserId: publicProcedure
@@ -92,9 +95,9 @@ export const postsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.session?.user?.id;
 
-      const { success } = await ratelimit.limit(authorId);
+      /* const { success } = await ratelimit.limit(authorId);
 
-      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" }); */
 
       const post = await ctx.prisma.tweet.create({
         data: {
