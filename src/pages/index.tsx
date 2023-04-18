@@ -1,4 +1,3 @@
-import { SignInButton, useUser } from "@clerk/nextjs";
 import type { NextPage } from "next";
 
 import { api } from "~/utils/api";
@@ -15,7 +14,7 @@ import { PostView } from "~/components/post-view";
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
-  const { user } = useUser();
+  /* const { user } = useUser();
 
   const [content, setContent] = React.useState<string>("");
 
@@ -71,11 +70,12 @@ const CreatePostWizard = () => {
         </div>
       )}
     </div>
-  );
+  ); */
+  return <div>CREATE POST DIV</div>;
 };
 
 const Feed = () => {
-  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
+  const { data, isLoading: postsLoading } = api.tweets.getAll.useQuery();
 
   if (postsLoading)
     return (
@@ -89,32 +89,25 @@ const Feed = () => {
   return (
     <div className="flex grow flex-col overflow-y-scroll">
       {data?.map((postWithUser) => (
-        <PostView key={postWithUser.post.id} {...postWithUser} />
+        <PostView key={postWithUser.id} {...postWithUser} />
       ))}
     </div>
   );
 };
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn, user } = useUser();
-
-  console.log({ user });
-
   // Start fetching asap
-  api.posts.getAll.useQuery();
-
-  // Return empty div if user isn't loaded
-  if (!userLoaded) return <div />;
+  api.tweets.getAll.useQuery();
 
   return (
     <PageLayout>
       <div className="border-b border-slate-400 p-4">
-        {!isSignedIn && (
+        {/* {!isSignedIn && (
           <div className="flex justify-center">
             <SignInButton />
           </div>
         )}
-        {isSignedIn && <CreatePostWizard />}
+        {isSignedIn && <CreatePostWizard />} */}
       </div>
       <Feed />
     </PageLayout>
