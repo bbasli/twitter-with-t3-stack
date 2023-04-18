@@ -52,7 +52,7 @@ const CreatePostWizard = () => {
         type="text"
         value={content}
         disabled={isPosting}
-        placeholder="Type some emojis"
+        placeholder="Type just some emojis"
         onChange={(e) => setContent(e.target.value)}
         className="grow bg-transparent outline-none"
         onKeyDown={(e) => {
