@@ -80,8 +80,9 @@ export const tweetsRouter = createTRPCRouter({
       async ({ ctx, input }) =>
         ctx.prisma.tweet.findMany({
           where: { authorId: input.userId },
-          take: 100,
           orderBy: [{ createdAt: "desc" }],
+          take: 100,
+          include: { author: true },
         })
       /* .then(addUserDataToPosts) */
     ),
