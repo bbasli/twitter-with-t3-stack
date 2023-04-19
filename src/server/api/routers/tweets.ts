@@ -2,33 +2,6 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-/* const addUserDataToPosts = async (posts: Post[]) => {
-  const users = (
-    await clerkClient.users.getUserList({
-      userId: posts.map((post) => post.authorId),
-      limit: 100,
-    })
-  ).map(filterUserForClient);
-
-  return posts.map((post) => {
-    const author = users.find((user) => user.id === post.authorId);
-
-    if (!author || !author.username)
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Author for post not found",
-      });
-
-    return {
-      post,
-      author: {
-        ...author,
-        username: author.username,
-      },
-    };
-  });
-}; */
-
 /* import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
@@ -39,15 +12,14 @@ const ratelimit = new Ratelimit({
 }); */
 
 export const tweetsRouter = createTRPCRouter({
-  getTweetById: publicProcedure.input(z.object({ id: z.number() })).query(
-    async ({ ctx, input }) =>
+  getTweetById: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) =>
       ctx.prisma.tweet.findUnique({
         where: { id: input.id },
         include: { author: true },
       })
-    /* .then((post) => post && addUserDataToPosts([post]))
-        .then((posts) => posts?.[0]) */
-  ),
+    ),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
     const tweets = await ctx.prisma.tweet.findMany({
@@ -67,15 +39,13 @@ export const tweetsRouter = createTRPCRouter({
         userId: z.number(),
       })
     )
-    .query(
-      async ({ ctx, input }) =>
-        ctx.prisma.tweet.findMany({
-          where: { authorId: input.userId },
-          orderBy: [{ createdAt: "desc" }],
-          take: 100,
-          include: { author: true },
-        })
-      /* .then(addUserDataToPosts) */
+    .query(({ ctx, input }) =>
+      ctx.prisma.tweet.findMany({
+        where: { authorId: input.userId },
+        orderBy: [{ createdAt: "desc" }],
+        take: 100,
+        include: { author: true },
+      })
     ),
 
   create: protectedProcedure
