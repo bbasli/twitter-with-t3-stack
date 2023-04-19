@@ -72,7 +72,6 @@ const CreatePostWizard = () => {
       )}
     </div>
   );
-  return <div>CREATE POST DIV</div>;
 };
 
 const Feed = () => {
@@ -105,9 +104,9 @@ const Home: NextPage = () => {
   return (
     <PageLayout>
       <div className="border-b border-slate-400 p-4">
-        <div className="flex justify-center">
+        <div className="flex justify-end">
           <button
-            className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+            className="rounded-full bg-slate-600 px-6 py-2 font-semibold text-white no-underline transition hover:bg-white/20"
             onClick={sessionData ? () => void signOut() : () => void signIn()}
           >
             {sessionData ? "Sign out" : "Sign in"}
