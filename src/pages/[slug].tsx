@@ -8,8 +8,8 @@ import Link from "next/link";
 import { PostView } from "~/components/post-view";
 import { LoadingPage } from "~/components/loading";
 
-const ProfileFeed = (props: { userId: string }) => {
-  const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
+const ProfileFeed = (props: { userId: number }) => {
+  const { data, isLoading } = api.tweets.getTweetsByUserId.useQuery({
     userId: props.userId,
   });
 
@@ -19,14 +19,14 @@ const ProfileFeed = (props: { userId: string }) => {
 
   return (
     <div className="flex grow flex-col overflow-y-scroll">
-      {data?.map((postWithUser) => (
-        <PostView key={postWithUser.post.id} {...postWithUser} />
+      {data?.map((tweetWithUser) => (
+        <PostView key={tweetWithUser.id} {...tweetWithUser} />
       ))}
     </div>
   );
 };
 
-const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
+const ProfilePage: NextPage<{ id: number }> = ({ id }) => {
   const { data } = api.profile.getUserByUsername.useQuery({ id });
 
   if (!data) return <h1>404!!!</h1>;
@@ -34,7 +34,7 @@ const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
   return (
     <>
       <Head>
-        <title>{data?.username}</title>
+        <title>{data?.name}</title>
       </Head>
       <PageLayout>
         <div className="flex items-center gap-4 p-1">
@@ -46,7 +46,7 @@ const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
               {data?.name ?? ""}
             </div>
             <div className="text-sm font-thin text-slate-400">{`${
-              data?.postCount ?? ""
+              data?.tweets.length ?? ""
             } Tweet`}</div>
           </div>
         </div>
@@ -54,8 +54,8 @@ const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
           <Image
             width={128}
             height={128}
-            src={data?.profileImageUrl}
-            alt={`${data?.username ?? "user"}'s profile`}
+            src={data?.image ?? "/avatar.png"}
+            alt={`${data?.name ?? "user"}'s profile`}
             className="absolute bottom-0 left-0 -mb-[64px] ml-4 rounded-full border-4 border-black"
           />
         </div>
@@ -63,7 +63,7 @@ const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
         <div className="p-6">
           <div className="text-2xl font-bold">{data?.name ?? ""}</div>
           <div className="text-base font-thin text-slate-600">{`@${
-            data?.username ?? ""
+            data?.name ?? ""
           }`}</div>
         </div>
         <div className="w-full border-b border-slate-400"></div>
@@ -81,7 +81,10 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const helpers = generateSSGHelper();
-  const slug = context.params?.slug as string;
+
+  if (!context.params?.slug) throw new Error("No slug");
+
+  const slug = parseInt(context.params?.slug as string);
 
   if (!slug) throw new Error("No slug");
 

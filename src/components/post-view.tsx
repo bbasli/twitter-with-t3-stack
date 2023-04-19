@@ -6,34 +6,43 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 import type { RouterOutputs } from "~/utils/api";
 
-export type PostWithUser = RouterOutputs["posts"]["getAll"][number];
+export type TweetWithAuthor = RouterOutputs["tweets"]["getAll"][number];
 
 dayjs.extend(relativeTime);
 
-export const PostView = (props: PostWithUser) => {
-  const { post, author } = props;
+const getUsernameFromEmail = (email: string) => {
+  const [username] = email.split("@");
+
+  return username;
+};
+
+export const PostView = (props: TweetWithAuthor) => {
+  const { author, ...tweet } = props;
 
   return (
     <div className="flex items-center gap-4 border-b border-slate-400 p-4">
       <Image
         width={48}
         height={48}
-        alt={author.username}
+        alt={author.name ?? ""}
         className="rounded-full"
-        src={author.profileImageUrl}
+        src={author.image ?? ""}
       />
       <div>
         <div className="flex gap-2 text-slate-300">
           <Link href={`/${author.id}`}>
-            <span>{`@${author.username}`}</span>
+            <span className="font-bold">{`${author.name ?? ""}`}</span>
+            <span className="ml-4 font-thin text-gray-500">{`@${
+              getUsernameFromEmail(author.email) ?? ""
+            }`}</span>
           </Link>
-          <Link href={`/post/${post.id}`}>
-            <span className="font-thin">{` · ${dayjs(
-              post.createdAt
+          <Link href={`/post/${tweet.id}`}>
+            <span className="font-thin text-gray-500">{` · ${dayjs(
+              tweet.createdAt
             ).fromNow()}`}</span>
           </Link>
         </div>
-        <span className="text-xl">{post.content}</span>
+        <span className="text-base">{tweet.text}</span>
       </div>
     </div>
   );
