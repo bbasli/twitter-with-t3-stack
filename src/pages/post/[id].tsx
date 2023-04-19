@@ -5,15 +5,15 @@ import { api } from "~/utils/api";
 
 import { PostView } from "~/components/post-view";
 
-const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
-  const { data } = api.posts.getPostById.useQuery({ id });
+const SinglePostPage: NextPage<{ id: number }> = ({ id }) => {
+  const { data } = api.tweets.getTweetById.useQuery({ id });
 
   if (!data) return <h1>404!!!</h1>;
 
   return (
     <>
       <Head>
-        <title>{`${data.post.content ?? "-"} - ${data.author.username}`}</title>
+        <title>{`${data.text ?? "-"} - ${data.author?.name ?? ""}`}</title>
       </Head>
       <PageLayout>
         <PostView {...data} />
@@ -30,11 +30,11 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const helpers = generateSSGHelper();
-  const id = context.params?.id as string;
+  const id = parseInt(context.params?.id as string);
 
   if (!id) throw new Error("No id");
 
-  await helpers.posts.getPostById.prefetch({ id });
+  await helpers.tweets.getTweetById.prefetch({ id });
 
   return {
     props: {

@@ -20,7 +20,7 @@ export const PostView = (props: TweetWithAuthor) => {
         height={48}
         alt={author.name ?? ""}
         className="rounded-full"
-        src={author.avatarUrl ?? ""}
+        src={author.image ?? ""}
       />
       <div>
         <div className="flex gap-2 text-slate-300">

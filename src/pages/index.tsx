@@ -10,22 +10,23 @@ import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { toast } from "react-hot-toast";
 import { PageLayout } from "~/components/layout";
 import { PostView } from "~/components/post-view";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
-  /* const { user } = useUser();
+  const { data: sessionData } = useSession();
 
   const [content, setContent] = React.useState<string>("");
 
-  if (!user) return null;
+  if (!sessionData) return null;
 
   const ctx = api.useContext();
 
-  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+  const { mutate, isLoading: isPosting } = api.tweets.create.useMutation({
     onSuccess: () => {
       setContent("");
-      void ctx.posts.getAll.invalidate();
+      void ctx.tweets.getAll.invalidate();
     },
     onError: (err) => {
       const errorMessage = err?.data?.zodError?.fieldErrors?.content;
@@ -45,7 +46,7 @@ const CreatePostWizard = () => {
         height={56}
         alt={"Profile image"}
         className="rounded-full"
-        src={user.profileImageUrl}
+        src={sessionData.user.image ?? ""}
       />
       <input
         type="text"
@@ -70,7 +71,7 @@ const CreatePostWizard = () => {
         </div>
       )}
     </div>
-  ); */
+  );
   return <div>CREATE POST DIV</div>;
 };
 
@@ -96,18 +97,23 @@ const Feed = () => {
 };
 
 const Home: NextPage = () => {
+  const { data: sessionData } = useSession();
+
   // Start fetching asap
   api.tweets.getAll.useQuery();
 
   return (
     <PageLayout>
       <div className="border-b border-slate-400 p-4">
-        {/* {!isSignedIn && (
-          <div className="flex justify-center">
-            <SignInButton />
-          </div>
-        )}
-        {isSignedIn && <CreatePostWizard />} */}
+        <div className="flex justify-center">
+          <button
+            className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+            onClick={sessionData ? () => void signOut() : () => void signIn()}
+          >
+            {sessionData ? "Sign out" : "Sign in"}
+          </button>
+        </div>
+        {sessionData && <CreatePostWizard />}
       </div>
       <Feed />
     </PageLayout>

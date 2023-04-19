@@ -1,16 +1,6 @@
-import { clerkClient } from "@clerk/nextjs/server";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import type { User } from "@clerk/nextjs/dist/api";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-
-const filterUserForClient = (user: User) => {
-  const { id, emailAddresses, profileImageUrl } = user;
-
-  const username = emailAddresses[0]?.emailAddress.split("@")[0];
-
-  return { id, username, profileImageUrl };
-};
 
 /* const addUserDataToPosts = async (posts: Post[]) => {
   const users = (
@@ -49,10 +39,11 @@ const ratelimit = new Ratelimit({
 }); */
 
 export const tweetsRouter = createTRPCRouter({
-  getPostById: publicProcedure.input(z.object({ id: z.number() })).query(
+  getTweetById: publicProcedure.input(z.object({ id: z.number() })).query(
     async ({ ctx, input }) =>
       ctx.prisma.tweet.findUnique({
         where: { id: input.id },
+        include: { author: true },
       })
     /* .then((post) => post && addUserDataToPosts([post]))
         .then((posts) => posts?.[0]) */
