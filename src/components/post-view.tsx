@@ -5,16 +5,11 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 import type { RouterOutputs } from "~/utils/api";
+import { getUsernameFromUser } from "~/utils/info-exraction";
 
 export type TweetWithAuthor = RouterOutputs["tweets"]["getAll"][number];
 
 dayjs.extend(relativeTime);
-
-const getUsernameFromEmail = (email: string) => {
-  const [username] = email.split("@");
-
-  return username;
-};
 
 export const PostView = (props: TweetWithAuthor) => {
   const { author, ...tweet } = props;
@@ -33,7 +28,7 @@ export const PostView = (props: TweetWithAuthor) => {
           <Link href={`/${author.id}`}>
             <span className="font-bold">{`${author.name ?? ""}`}</span>
             <span className="ml-4 font-thin text-gray-500">{`@${
-              getUsernameFromEmail(author.email) ?? ""
+              getUsernameFromUser(author) ?? ""
             }`}</span>
           </Link>
           <Link href={`/post/${tweet.id}`}>

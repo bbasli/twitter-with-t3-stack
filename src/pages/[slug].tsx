@@ -8,6 +8,8 @@ import Link from "next/link";
 import { PostView } from "~/components/post-view";
 import { LoadingPage } from "~/components/loading";
 
+import { getUsernameFromUser } from "~/utils/info-exraction";
+
 const ProfileFeed = (props: { userId: number }) => {
   const { data, isLoading } = api.tweets.getTweetsByUserId.useQuery({
     userId: props.userId,
@@ -42,10 +44,10 @@ const ProfilePage: NextPage<{ id: number }> = ({ id }) => {
             <FiArrowLeft size={24} />
           </Link>
           <div>
-            <div className="text-[20px leading-6] font-bold">
+            <div className="text-[20px] font-bold leading-6">
               {data?.name ?? ""}
             </div>
-            <div className="text-sm font-thin text-slate-400">{`${
+            <div className="text-[13px] font-thin text-slate-400">{`${
               data?.tweets.length ?? ""
             } Tweet`}</div>
           </div>
@@ -62,9 +64,9 @@ const ProfilePage: NextPage<{ id: number }> = ({ id }) => {
         <div className="h-[64px]"></div>
         <div className="p-6">
           <div className="text-2xl font-bold">{data?.name ?? ""}</div>
-          <div className="text-base font-thin text-slate-600">{`@${
-            data?.name ?? ""
-          }`}</div>
+          <div className="text-base font-thin text-slate-600">
+            {`@${getUsernameFromUser(data)}`}
+          </div>
         </div>
         <div className="w-full border-b border-slate-400"></div>
         <ProfileFeed userId={id} />
