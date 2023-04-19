@@ -37,7 +37,7 @@ export const PostView = (props: TweetWithAuthor) => {
             ).fromNow()}`}</span>
           </Link>
         </div>
-        <span className="text-base">{tweet.text}</span>
+        <span className="text-sm">{tweet.text}</span>
       </div>
     </div>
   );
