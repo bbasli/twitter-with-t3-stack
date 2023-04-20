@@ -23,7 +23,7 @@ export const PostView = (props: TweetWithAuthor) => {
   const { author, ...tweet } = props;
 
   return (
-    <div className="flex gap-4 border-b border-slate-400 p-4">
+    <article className="flex gap-4 border-b border-slate-400 p-4">
       <Image
         width={48}
         height={48}
@@ -58,6 +58,6 @@ export const PostView = (props: TweetWithAuthor) => {
           <FontAwesomeIcon icon={faChartSimple} />
         </div>
       </div>
-    </div>
+    </article>
   );
 };
