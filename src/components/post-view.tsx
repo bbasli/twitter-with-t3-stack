@@ -7,6 +7,14 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import type { RouterOutputs } from "~/utils/api";
 import { getUsernameFromUser } from "~/utils/info-exraction";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHeart,
+  faRetweet,
+  faComment,
+  faChartSimple,
+} from "@fortawesome/free-solid-svg-icons";
+
 export type TweetWithAuthor = RouterOutputs["tweets"]["getAll"][number];
 
 dayjs.extend(relativeTime);
@@ -42,6 +50,12 @@ export const PostView = (props: TweetWithAuthor) => {
             </Link>
           </div>
           <span className="text-sm">{tweet.text}</span>
+        </div>
+        <div className="mt-2 flex gap-20">
+          <FontAwesomeIcon icon={faComment} />
+          <FontAwesomeIcon icon={faRetweet} />
+          <FontAwesomeIcon icon={faHeart} style={{ color: "#ff0000" }} />
+          <FontAwesomeIcon icon={faChartSimple} />
         </div>
       </div>
     </div>
