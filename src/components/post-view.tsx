@@ -21,7 +21,10 @@ export const PostView = (props: TweetWithAuthor) => {
         height={48}
         alt={author.name ?? ""}
         className="h-12 rounded-full"
-        src={author.image ?? ""}
+        src={
+          author.image ??
+          "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
+        }
       />
       <div className="flex flex-1 flex-col gap-2">
         <div>
