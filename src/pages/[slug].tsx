@@ -1,12 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import { FiArrowLeft } from "react-icons/fi";
 import Image from "next/image";
-import Link from "next/link";
 
 import { PostView } from "~/components/post-view";
 import { LoadingPage } from "~/components/loading";
+import GoBackArrow from "~/components/goBackArrow";
 
 import { getUsernameFromUser } from "~/utils/info-exraction";
 
@@ -40,9 +39,7 @@ const ProfilePage: NextPage<{ id: number }> = ({ id }) => {
       </Head>
       <PageLayout>
         <div className="flex items-center gap-4 p-1">
-          <Link href={"/"} className="px-4">
-            <FiArrowLeft size={24} />
-          </Link>
+          <GoBackArrow />
           <div>
             <div className="text-[20px] font-bold leading-6">
               {data?.name ?? ""}
