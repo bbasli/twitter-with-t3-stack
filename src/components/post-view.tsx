@@ -51,7 +51,7 @@ export const PostView = (props: TweetWithAuthor) => {
           </div>
           <span className="text-sm">{tweet.text}</span>
         </div>
-        <div className="mt-2 flex gap-20">
+        <div className="mt-2 flex h-[16px] gap-20">
           <FontAwesomeIcon icon={faComment} />
           <FontAwesomeIcon icon={faRetweet} />
           <FontAwesomeIcon icon={faHeart} style={{ color: "#ff0000" }} />
