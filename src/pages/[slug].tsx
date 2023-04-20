@@ -65,7 +65,10 @@ const ProfilePage: NextPage<{ id: number }> = ({ id }) => {
           <Image
             width={128}
             height={128}
-            src={data?.image ?? "/avatar.png"}
+            src={
+              data?.image ??
+              "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
+            }
             alt={`${data?.name ?? "user"}'s profile`}
             className="absolute bottom-0 left-0 -mb-[64px] ml-4 rounded-full border-4 border-black"
           />
