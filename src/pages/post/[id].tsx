@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import { api } from "~/utils/api";
 
 import { PostView } from "~/components/post-view";
+import GoBackArrow from "~/components/goBackArrow";
 
 const SinglePostPage: NextPage<{ id: number }> = ({ id }) => {
   const { data } = api.tweets.getTweetById.useQuery({ id });
@@ -16,6 +17,10 @@ const SinglePostPage: NextPage<{ id: number }> = ({ id }) => {
         <title>{`${data.text ?? "-"} - ${data.author?.name ?? ""}`}</title>
       </Head>
       <PageLayout>
+        <div className="flex h-[55px] items-center gap-4 border-b border-slate-400 p-1">
+          <GoBackArrow />
+          <span className="text-xl font-bold">Tweets</span>
+        </div>
         <PostView {...data} />
       </PageLayout>
     </>
