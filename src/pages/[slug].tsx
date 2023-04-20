@@ -54,6 +54,15 @@ const ProfilePage: NextPage<{ id: number }> = ({ id }) => {
         </div>
         <div className="relative h-48 bg-slate-600">
           <Image
+            height={192}
+            width={192}
+            src={
+              "https://pbs.twimg.com/profile_banners/171393795/1619389264/1500x500"
+            }
+            alt="banner"
+            className="absolute left-0 top-0 h-full w-full object-cover"
+          />
+          <Image
             width={128}
             height={128}
             src={data?.image ?? "/avatar.png"}
