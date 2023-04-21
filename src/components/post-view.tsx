@@ -4,7 +4,7 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
-import type { RouterOutputs } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
 import { getUsernameFromUser } from "~/utils/info-exraction";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,7 +23,7 @@ export const PostView = (props: TweetWithAuthor) => {
   const { author, ...tweet } = props;
 
   const handleLikeClick = () => {
-    console.log("like");
+    api.tweets.likeTweet.useQuery({ tweetId: tweet.id });
   };
 
   return (
