@@ -70,4 +70,37 @@ export const tweetsRouter = createTRPCRouter({
 
       return post;
     }),
+
+  likeTweet: protectedProcedure
+    .input(
+      z.object({
+        tweetId: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const like = await ctx.prisma.like.findUnique({
+        where: {
+          tweetId: input.tweetId,
+          userId: parseInt(ctx.session?.user?.id, 10),
+        },
+      });
+
+      if (like) {
+        await ctx.prisma.like.delete({
+          where: {
+            tweetId: input.tweetId,
+            userId: parseInt(ctx.session?.user?.id, 10),
+          },
+        });
+
+        return;
+      }
+
+      await ctx.prisma.like.create({
+        data: {
+          tweetId: input.tweetId,
+          userId: parseInt(ctx.session?.user?.id, 10),
+        },
+      });
+    }),
 });
