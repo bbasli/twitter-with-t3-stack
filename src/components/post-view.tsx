@@ -22,6 +22,10 @@ dayjs.extend(relativeTime);
 export const PostView = (props: TweetWithAuthor) => {
   const { author, ...tweet } = props;
 
+  const handleLikeClick = () => {
+    console.log("like");
+  };
+
   return (
     <article className="flex gap-4 border-b border-slate-400 p-4">
       <Image
@@ -54,7 +58,11 @@ export const PostView = (props: TweetWithAuthor) => {
         <div className="mt-2 flex h-[16px] gap-20">
           <FontAwesomeIcon icon={faComment} />
           <FontAwesomeIcon icon={faRetweet} />
-          <FontAwesomeIcon icon={faHeart} style={{ color: "#ff0000" }} />
+          <FontAwesomeIcon
+            icon={faHeart}
+            style={{ color: "#ff0000" }}
+            onClick={handleLikeClick}
+          />
           <FontAwesomeIcon icon={faChartSimple} />
         </div>
       </div>
