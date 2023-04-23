@@ -81,16 +81,20 @@ export const tweetsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const like = await ctx.prisma.like.findUnique({
         where: {
-          tweetId: input.tweetId,
-          userId: parseInt(ctx.session?.user?.id, 10),
+          tweetId_userId: {
+            tweetId: input.tweetId,
+            userId: parseInt(ctx.session?.user?.id, 10),
+          },
         },
       });
 
       if (like) {
         await ctx.prisma.like.delete({
           where: {
-            tweetId: input.tweetId,
-            userId: parseInt(ctx.session?.user?.id, 10),
+            tweetId_userId: {
+              tweetId: input.tweetId,
+              userId: parseInt(ctx.session?.user?.id, 10),
+            },
           },
         });
 
