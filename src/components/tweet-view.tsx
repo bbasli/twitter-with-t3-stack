@@ -22,9 +22,10 @@ dayjs.extend(relativeTime);
 export const TweetView = (props: TweetWithAuthor) => {
   const { author, ...tweet } = props;
 
-  const like = api.tweets.likeTweet.useMutation({ tweetId: tweet.id });
+  const like = api.tweets.likeTweet.useMutation();
 
   const handleLikeClick = () => {
+    like.mutate({ tweetId: tweet.id });
   };
 
   const isUserLiked = tweet.likes.some(
