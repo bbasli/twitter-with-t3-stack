@@ -62,18 +62,29 @@ export const TweetView = (props: TweetWithAuthor) => {
           <span className="text-sm">{tweet.text}</span>
         </div>
         <div className="mt-2 flex h-[16px] gap-20">
-          <FontAwesomeIcon icon={faComment} />
-          <FontAwesomeIcon icon={faRetweet} />
-          <FontAwesomeIcon
-            icon={faHeart}
-            style={
-              isUserLiked
-                ? { color: "#ff0000", cursor: "pointer" }
-                : { cursor: "pointer" }
-            }
-            onClick={handleLikeClick}
-          />
-          <FontAwesomeIcon icon={faChartSimple} />
+          <div className="flex items-center">
+            <FontAwesomeIcon icon={faComment} />
+          </div>
+          <div className="flex items-center">
+            <FontAwesomeIcon icon={faRetweet} />
+          </div>
+          <div className="flex items-center">
+            <FontAwesomeIcon
+              icon={faHeart}
+              style={
+                isUserLiked
+                  ? { color: "#ff0000", cursor: "pointer" }
+                  : { cursor: "pointer" }
+              }
+              onClick={handleLikeClick}
+            />
+            {tweet.likes.length > 0 && (
+              <span className="ml-1 text-sm">{tweet.likes.length}</span>
+            )}
+          </div>
+          <div className="flex items-center">
+            <FontAwesomeIcon icon={faChartSimple} />
+          </div>
         </div>
       </div>
     </article>
