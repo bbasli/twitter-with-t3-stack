@@ -78,7 +78,7 @@ export const tweetsRouter = createTRPCRouter({
         tweetId: z.number(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const like = await ctx.prisma.like.findUnique({
         where: {
           tweetId: input.tweetId,

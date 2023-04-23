@@ -22,9 +22,14 @@ dayjs.extend(relativeTime);
 export const TweetView = (props: TweetWithAuthor) => {
   const { author, ...tweet } = props;
 
+  const like = api.tweets.likeTweet.useMutation({ tweetId: tweet.id });
+
   const handleLikeClick = () => {
-    api.tweets.likeTweet.useQuery({ tweetId: tweet.id });
   };
+
+  const isUserLiked = tweet.likes.some(
+    (like) => like.userId === props.author.id
+  );
 
   return (
     <article className="flex gap-4 border-b border-slate-400 p-4">
