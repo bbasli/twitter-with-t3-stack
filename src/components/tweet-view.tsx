@@ -21,6 +21,11 @@ export type TweetWithAuthor = RouterOutputs["tweets"]["getAll"][number];
 
 dayjs.extend(relativeTime);
 
+const defaultIconStyle = {
+  height: 16,
+  cursor: "pointer",
+};
+
 export const TweetView = (props: TweetWithAuthor) => {
   const { author, ...tweet } = props;
 
@@ -73,18 +78,18 @@ export const TweetView = (props: TweetWithAuthor) => {
         </div>
         <div className="mt-2 flex h-[16px] gap-20">
           <div className="flex items-center">
-            <FontAwesomeIcon icon={faComment} />
+            <FontAwesomeIcon style={defaultIconStyle} icon={faComment} />
           </div>
           <div className="flex items-center">
-            <FontAwesomeIcon icon={faRetweet} />
+            <FontAwesomeIcon style={defaultIconStyle} icon={faRetweet} />
           </div>
           <div className="flex items-center">
             <FontAwesomeIcon
               icon={faHeart}
               style={
                 isUserLiked
-                  ? { color: "#ff0000", cursor: "pointer" }
-                  : { cursor: "pointer" }
+                  ? { ...defaultIconStyle, color: "#ff0000" }
+                  : defaultIconStyle
               }
               onClick={handleLikeClick}
             />
@@ -93,7 +98,7 @@ export const TweetView = (props: TweetWithAuthor) => {
             )}
           </div>
           <div className="flex items-center">
-            <FontAwesomeIcon icon={faChartSimple} />
+            <FontAwesomeIcon icon={faChartSimple} style={defaultIconStyle} />
           </div>
         </div>
       </div>
