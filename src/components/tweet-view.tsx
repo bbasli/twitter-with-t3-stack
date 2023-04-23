@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { useSession } from "next-auth/react";
 
@@ -33,9 +34,13 @@ export const TweetView = (props: TweetWithAuthor) => {
 
   const ctx = api.useContext();
 
+  const router = useRouter();
+
   const like = api.tweets.likeTweet.useMutation({
     onSuccess: () => {
-      void ctx.tweets.getAll.invalidate();
+      if (router.asPath.startsWith("/tweet/"))
+        void ctx.tweets.getTweetById.invalidate({ id: tweet.id });
+      else void ctx.tweets.getAll.invalidate();
     },
   });
 
