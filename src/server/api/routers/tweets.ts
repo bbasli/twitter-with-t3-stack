@@ -24,6 +24,7 @@ export const tweetsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     const tweets = await ctx.prisma.tweet.findMany({
       include: {
+        likes: true,
         author: true,
       },
       take: 100,
@@ -44,7 +45,7 @@ export const tweetsRouter = createTRPCRouter({
         where: { authorId: input.userId },
         orderBy: [{ createdAt: "desc" }],
         take: 100,
-        include: { author: true },
+        include: { author: true, likes: true },
       })
     ),
 
