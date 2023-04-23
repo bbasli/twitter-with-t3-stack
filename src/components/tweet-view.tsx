@@ -60,7 +60,11 @@ export const TweetView = (props: TweetWithAuthor) => {
           <FontAwesomeIcon icon={faRetweet} />
           <FontAwesomeIcon
             icon={faHeart}
-            style={{ color: "#ff0000" }}
+            style={
+              isUserLiked
+                ? { color: "#ff0000", cursor: "pointer" }
+                : { cursor: "pointer" }
+            }
             onClick={handleLikeClick}
           />
           <FontAwesomeIcon icon={faChartSimple} />
