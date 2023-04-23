@@ -17,7 +17,7 @@ export const tweetsRouter = createTRPCRouter({
     .query(({ ctx, input }) =>
       ctx.prisma.tweet.findUnique({
         where: { id: input.id },
-        include: { author: true },
+        include: { author: true, likes: true },
       })
     ),
 
