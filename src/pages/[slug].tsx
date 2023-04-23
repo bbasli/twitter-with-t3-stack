@@ -3,7 +3,7 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import Image from "next/image";
 
-import { PostView } from "~/components/post-view";
+import { TweetView } from "~/components/tweet-view";
 import { LoadingPage } from "~/components/loading";
 import GoBackArrow from "~/components/goBackArrow";
 
@@ -21,7 +21,7 @@ const ProfileFeed = (props: { userId: number }) => {
   return (
     <div className="flex grow flex-col overflow-y-scroll">
       {data?.map((tweetWithUser) => (
-        <PostView key={tweetWithUser.id} {...tweetWithUser} />
+        <TweetView key={tweetWithUser.id} {...tweetWithUser} />
       ))}
     </div>
   );

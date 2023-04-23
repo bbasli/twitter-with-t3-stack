@@ -9,7 +9,7 @@ import React from "react";
 import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { toast } from "react-hot-toast";
 import { PageLayout } from "~/components/layout";
-import { PostView } from "~/components/post-view";
+import { TweetView } from "~/components/tweet-view";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 dayjs.extend(relativeTime);
@@ -89,7 +89,7 @@ const Feed = () => {
   return (
     <div className="flex grow flex-col overflow-y-scroll">
       {data?.map((postWithUser) => (
-        <PostView key={postWithUser.id} {...postWithUser} />
+        <TweetView key={postWithUser.id} {...postWithUser} />
       ))}
     </div>
   );

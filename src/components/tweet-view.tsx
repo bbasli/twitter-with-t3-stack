@@ -19,7 +19,7 @@ export type TweetWithAuthor = RouterOutputs["tweets"]["getAll"][number];
 
 dayjs.extend(relativeTime);
 
-export const PostView = (props: TweetWithAuthor) => {
+export const TweetView = (props: TweetWithAuthor) => {
   const { author, ...tweet } = props;
 
   const handleLikeClick = () => {
@@ -47,7 +47,7 @@ export const PostView = (props: TweetWithAuthor) => {
                 getUsernameFromUser(author) ?? ""
               }`}</span>
             </Link>
-            <Link href={`/post/${tweet.id}`}>
+            <Link href={`/tweet/${tweet.id}`}>
               <span className="font-thin text-gray-500">{` · ${dayjs(
                 tweet.createdAt
               ).fromNow()}`}</span>
