@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 
 import { api } from "~/utils/api";
 
-import { PostView } from "~/components/post-view";
+import { TweetView } from "~/components/tweet-view";
 import GoBackArrow from "~/components/goBackArrow";
 
 const SinglePostPage: NextPage<{ id: number }> = ({ id }) => {
@@ -21,7 +21,7 @@ const SinglePostPage: NextPage<{ id: number }> = ({ id }) => {
           <GoBackArrow />
           <span className="text-xl font-bold">Tweets</span>
         </div>
-        <PostView {...data} />
+        <TweetView {...data} />
       </PageLayout>
     </>
   );
