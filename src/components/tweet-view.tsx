@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { useSession } from "next-auth/react";
+
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -22,14 +24,22 @@ dayjs.extend(relativeTime);
 export const TweetView = (props: TweetWithAuthor) => {
   const { author, ...tweet } = props;
 
-  const like = api.tweets.likeTweet.useMutation();
+  const { data: sessionData } = useSession();
+
+  const ctx = api.useContext();
+
+  const like = api.tweets.likeTweet.useMutation({
+    onSuccess: () => {
+      void ctx.tweets.getAll.invalidate();
+    },
+  });
 
   const handleLikeClick = () => {
     like.mutate({ tweetId: tweet.id });
   };
 
   const isUserLiked = tweet.likes.some(
-    (like) => like.userId === props.author.id
+    (like) => like.userId === parseInt(sessionData?.user.id ?? "0")
   );
 
   return (
